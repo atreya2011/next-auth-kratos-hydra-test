@@ -33,8 +33,7 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 ## Caveats
 
-- Any projected created using this starter template will not have git initialized as its source control and therefore husky & lint-staged will not work out of the box.
-- To make husky & lint-staged work after initializing an empty git repository, run the following command:
+- To make husky & lint-staged work after creating a new project using this template, run the following command:
 
 ```bash
 npm rebuild
