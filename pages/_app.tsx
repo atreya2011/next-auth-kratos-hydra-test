@@ -8,6 +8,7 @@ function App({ Component, pageProps: { session, ...pageProps }, router: { route 
 
   return (
     <SessionProvider session={session}>
+      {/* Refer: https:github.com/nextauthjs/next-auth/issues/1210#issuecomment-866575527 */}
       {requireAuth ? (
         <Auth>
           <Component {...pageProps} />

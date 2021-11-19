@@ -31,10 +31,13 @@ export default function Home() {
               </li>
             </ul>
           </ul>
-          <div className="min-w-full px-3.5">
+          <div className="flex items-center justify-between min-w-full">
             <button
               className="min-w-full bg-indigo-900 hover:bg-indigo-700 px-5 py-3 rounded-md my-3 text-xl text-white"
-              onClick={() => signOut()}
+              onClick={() => {
+                signOut();
+                window.location.replace("http://localhost:4455/logout");
+              }}
             >
               Sign out
             </button>

@@ -1,20 +1,15 @@
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID as string,
-      clientSecret: process.env.GOOGLE_SECRET as string,
-    }),
     {
       id: "kratos-hydra",
       name: "Kratos & Hydra",
       type: "oauth",
-      wellKnown: "http://127.0.0.1:4444/.well-known/openid-configuration",
+      wellKnown: "http://localhost:4444/.well-known/openid-configuration",
       authorization: { params: { grant_type: "authorization_code" } },
       idToken: true,
       checks: ["pkce", "state"],
@@ -91,6 +86,7 @@ export default NextAuth({
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     // async signIn({ user, account, profile, email, credentials }) { return true },
+    // This function is called first to determine if a user is allowed to sign in.
     async signIn({ profile }) {
       console.log("signIn-profile", profile);
       if (profile) {
@@ -102,17 +98,10 @@ export default NextAuth({
         // return '/unauthorized'
       }
     },
-    // async redirect({ url, baseUrl }) { return baseUrl },
-    async redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? `${baseUrl}/` : baseUrl;
-    },
-    // async session({ session, token, user }) { return session },
-    async session({ session, token, user }) {
-      console.log("session-session", session, "session-token", token, "session-user", user);
-      session.accessToken = token.accessToken;
-      return session;
-    },
     // async jwt({ token, user, account, profile, isNewUser }) { return token }
+    // This function is called second, after the signIn callback function.
+    // The access token is extracted from the OAuth provider's response,
+    // and stored in the token object.
     jwt({ token, account }) {
       console.log("jwt-token", token, "jwt-account", account);
       // add accessToken to token
@@ -120,6 +109,19 @@ export default NextAuth({
         token.accessToken = account.access_token;
       }
       return token;
+    },
+    // async session({ session, token, user }) { return session },
+    // This function is called third, after the jwt callback function.
+    // The access token that is extracted in the jwt callback function,
+    // is stored in the session object.
+    async session({ session, token, user }) {
+      console.log("session-session", session, "session-token", token, "session-user", user);
+      session.accessToken = token.accessToken;
+      return session;
+    },
+    // async redirect({ url, baseUrl }) { return baseUrl },
+    async redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl) ? `${baseUrl}/` : baseUrl;
     },
   },
 
