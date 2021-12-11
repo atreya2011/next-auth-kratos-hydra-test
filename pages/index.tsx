@@ -36,7 +36,7 @@ export default function Home() {
               className="min-w-full bg-indigo-900 hover:bg-indigo-700 px-5 py-3 rounded-md my-3 text-xl text-white"
               onClick={() => {
                 signOut();
-                window.location.replace("http://localhost:4455/logout");
+                window.location.replace("http://127.0.0.1:4455/logout");
               }}
             >
               Sign out

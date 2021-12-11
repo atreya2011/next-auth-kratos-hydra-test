@@ -1,14 +1,5 @@
 module.exports = {
-  purge: [
-    "./pages/**/*.js",
-    "./pages/**/*.jsx",
-    "./pages/**/*.ts",
-    "./pages/**/*.tsx",
-    "./components/**/*.js",
-    "./components/**/*.jsx",
-    "./components/**/*.ts",
-    "./components/**/*.tsx",
-  ],
+  content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
