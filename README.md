@@ -1,6 +1,6 @@
-# Next.js Starter Template with TailwindCSS, TypeScript et al
+# Next.js implementation using Ory Kratos + Hydra as a custom OAuth provider in Next-Auth
 
-This repo contains an opinionated starter template for Next.js pre-installed and configured with the following:
+This repo uses the following:
 
 - TailwindCSS for styling: <https://tailwindcss.com/docs>
 - ESLint for code linting: <https://eslint.org>
@@ -11,37 +11,49 @@ This repo contains an opinionated starter template for Next.js pre-installed and
 
 ## Getting Started
 
-Run the following command to get started with a new project using this template:
+Switch to the `hydra-consent` branch:
 
 ```bash
-npx create-next-app [project-name] -e https://github.com/atreya2011/next-tailwind-ts-template
-# or
-yarn create next-app [project-name] -e https://github.com/atreya2011/next-tailwind-ts-template
+git checkout hydra-consent
+```
+
+Make a copy of the `.env.local.example` file and rename it to `.env.local`:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Run the following command to install all dependencies:
+
+```bash
+npm install
+```
+
+Create an OAuth Client using the following command:
+
+```bash
+curl -X POST 'http://localhost:4445/clients' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{
+    "client_id": "next-auth-test-client",
+    "client_name": "Next Auth Test OAuth2 Client",
+    "client_secret": "secret",
+    "grant_types": ["authorization_code", "refresh_token"],
+    "redirect_uris": ["http://localhost:3000/api/auth/callback/kratos-hydra"],
+    "response_types": ["code", "id_token"],
+    "scope": "openid offline",
+    "token_endpoint_auth_method": "client_secret_basic",
+    "metadata": {"registration":true}
+  }'
 ```
 
 Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://127.0.0.1:3000](http://127.0.0.1:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-## Caveats
-
-- To make husky & lint-staged work after creating a new project using this template, run the following command:
-
-```bash
-npm rebuild
-# or
-yarn --force
-# or
-npm rebuild --update-binary # (if yarn --force doesn't work)
-```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Learn More
 
